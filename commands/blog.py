@@ -1,12 +1,13 @@
 from utils.utils import *
 from utils.dcview import *
+from utils.loggg import *
 import os
 
 import json
 import functools
 import typing
 import asyncio
-import logging
+
 
 
 import os
@@ -28,9 +29,6 @@ command_data = {
     'description': 'chat with any blog'
 }
 
-
-
-    
 async def discuss(message, url,bot=None):
     query = message.content
     text = get_content_url(url,stored=True)
@@ -38,10 +36,10 @@ async def discuss(message, url,bot=None):
     await send_long_message(message.channel,answer)
     await message.channel.send(view=blog_view(answer))
 
-async def execute(message,bot,debug=False):
+async def execute(message, bot, debug=False):
     url = message.content.split(" ")[1]
     if debug:
-        logging.info(f"Blog query {url}")
+        logger.info(f"Blog query {url}")
     if url == "l":
         urls = get_all_urls()
         print(urls)
@@ -63,25 +61,29 @@ async def execute(message,bot,debug=False):
     else:
         url = extract_urls(message.content)[0]
 
-    text = get_content_url(url,stored=True)
-    if text:
-        query = " ".join(message.content.split(" ")[2:])
-        thread = await message.create_thread(name=url[:60])
-        if query == "full":
-            answer = text
-        else :
-            if len(query.strip()) == 0:
-                query = "Summary the content and  after summarizing, please also suggest appropriate hashtags (less than 10) that would help in categorizing and highlighting the key topics discussed in the blog. I've already thought of a few hashtags like #lpe, #rce, #android, #chrome, #windows, #linux, #firefox , #ios, #exploit, #sandboxescape. Feel free to include these and any other similar ones."
-            answer,all_answer = await blog_retrieve(query,text,bot=bot)
+    logger.info(f"DEBUG: URL: {url}")
+    text = get_content_url(url, stored=True)
+    try:
+        # logger.info(f"DEBUG: text: {text}")
+        if text:
+            query = " ".join(message.content.split(" ")[2:])
+            logger.info(f"DEBUG: Blog query {url} {query}")
+            thread = await message.create_thread(name=url[:60])
+            logger.info(f"DEBUG: Thread created {url}")
+            if query == "full":
+                answer = text
+            else:
+                if len(query.strip()) == 0:
+                    query = "Summary the content and  after summarizing, please also suggest appropriate hashtags (less than 6) that would help in categorizing and highlighting the key topics discussed in the blog."
+                answer,all_answer = await blog_retrieve(query,text,bot=bot)
+                
+            print(url + " " + query)
     
-    
-        print(url + " " + query)
-    
-
-        
-        insert_thread_to_db(thread.id,1,url,message)
-        await send_long_message(thread, answer)
-        await thread.send(view=blog_view(answer))
-    else:
-        await send_long_message(thread, "No content found for this url")
-    
+            insert_thread_to_db(thread.id, 1, url, message)
+            await send_long_message(thread, answer)
+            await thread.send(view=blog_view(answer))
+        else:
+            await send_long_message(thread, "No content found for this url")
+    except Exception as e:
+        logger.error("An error occurred at execute func: {}".format(e))
+        raise e

@@ -1,4 +1,3 @@
-from utils.minitube import *
 import sys, fitz
 import subprocess
 import pandas as pd
@@ -11,7 +10,10 @@ import tiktoken
 import openai
 from dotenv import load_dotenv
 import time
-import logging
+
+
+from utils.minitube import *
+from utils.loggg import *
 
 load_dotenv()
 # get API key from top-right dropdown on OpenAI website
@@ -87,11 +89,10 @@ def download_pdf(url, folder='pdfs/'):
     return text
 
 
-def get_content_url(url,stored=False,debug=False):
+def get_content_url(url, stored=False, debug=False):
 
     csv_file = 'blogs/scraped.csv' 
     
-   
     if os.path.exists(csv_file) and stored:
         
         existing_data = pd.read_csv(csv_file)
@@ -99,16 +100,17 @@ def get_content_url(url,stored=False,debug=False):
             print(f"URL '{url}' already exists in the CSV file.")
             return existing_data.loc[existing_data['url'] == url, 'text'].iloc[0]
 
-    logging.info(f"Get data from  {url}")
+    logger.info(f"Get data from  {url}")
     
     if url.endswith(".pdf"):
         text = download_pdf(url)
-        logging.info("Processing pdf file")
+        logger.info("Processing pdf file")
     elif "youtube" in url or "youtu.be" in url:
-        logging.info("Processing youtube video")
+        logger.info("Processing youtube video")
         text = get_content_from_youtube_url(url)
     else:
-        logging.info("Processing normal url")
+        logger.info("Processing normal url")
+        #TODO support medium
         result = subprocess.run(["curl", "-s", url], capture_output=True, text=True)
 
         if debug:
@@ -199,7 +201,7 @@ def count_token(text):
 
 def get_answer_api(prompt, msgs = None,max_token=2000):
     if msgs == None:
-        mssgs = [{"role": "system", "content": "You are expert in software security and vulnerability finding."},{"role": "user", "content": prompt}]
+        mssgs = [{"role": "system", "content": "You are a Security Expert, Bug Bounty Hunter and as senior in Site Reliability Engineer, DevOps, Cloud Engineer. You're expert on all technical things as well."}, {"role": "user", "content": prompt}]
     else:
         mssgs = msgs 
         mssgs.append({"role": "user", "content": prompt})
@@ -255,7 +257,7 @@ def blog_retrieve(query, content,isvr=True,bot=None):
     
     assistant = "You are a helpful assistant\n"
     if isvr:
-        assistant = "You are expert in software security and vulnerability finding\n"
+        assistant = "You are a Security Expert, Bug Bounty Hunter and as senior in Site Reliability Engineer, DevOps, Cloud Engineer. You're expert on all technical things as well.\n"
     template = """Please follow the template example below to answer the question:
     Example 1:
     Question:

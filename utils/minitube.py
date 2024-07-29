@@ -22,7 +22,7 @@ def load_whisper_model():
 
 
 def valid_url(url):
- return re.search(r'((http(s)?:\/\/)?)(www\.)?((youtube\.com\/)|(youtu.be\/))[\S]+', url)
+    return re.search(r'((http(s)?:\/\/)?)(www\.)?((youtube\.com\/)|(youtu.be\/))[\S]+', url)
 
 
 def get_video_duration_from_youtube_url(url):

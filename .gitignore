@@ -1,0 +1,6 @@
+.env
+prompt.txt
+__pycache__
+db/
+app.log
+blog/*.csv
