@@ -201,7 +201,7 @@ def count_token(text):
 
 def get_answer_api(prompt, msgs = None,max_token=2000):
     if msgs == None:
-        mssgs = [{"role": "system", "content": "You are a Security Expert, Bug Bounty Hunter and as senior in Site Reliability Engineer, DevOps, Cloud Engineer. You're expert on all technical things as well."}, {"role": "user", "content": prompt}]
+        mssgs = [{"role": "system", "content": "You are a Security Expert, Bug Bounty Hunter and as senior in Site Reliability Engineer, DevOps, Cloud Engineer. You are cryptography enthusiasm. You're expert on all technical things as well."}, {"role": "user", "content": prompt}]
     else:
         mssgs = msgs 
         mssgs.append({"role": "user", "content": prompt})
@@ -257,7 +257,7 @@ def blog_retrieve(query, content,isvr=True,bot=None):
     
     assistant = "You are a helpful assistant\n"
     if isvr:
-        assistant = "You are a Security Expert, Bug Bounty Hunter and as senior in Site Reliability Engineer, DevOps, Cloud Engineer. You're expert on all technical things as well.\n"
+        assistant = "You are a Security Expert, Bug Bounty Hunter and as senior in Site Reliability Engineer, DevOps, Cloud Engineer. You are cryptography enthusiasm. You're expert on all technical things as well.\n"
     template = """Please follow the template example below to answer the question:
     Example 1:
     Question:

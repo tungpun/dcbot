@@ -2,7 +2,7 @@ import os
 import re
 
 from pytube import YouTube
-import whisper
+# import whisper
 import logging
 
 SAMPLES = {
