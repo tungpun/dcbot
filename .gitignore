@@ -4,3 +4,5 @@ __pycache__
 db/
 app.log
 blog/*.csv
+.vscode
+.DS_Store

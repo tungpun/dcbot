@@ -91,8 +91,6 @@ async def create_server_and_channel():
 @bot.event
 async def on_ready():
     logging.info(f"Bot is ready as {bot.user}")
-      
-    
 
 
 @bot.event
@@ -156,7 +154,7 @@ async def setup_and_run():
         
     finally:
         await bot.close()
-
+ 
 async def main():
     if not os.getenv('DISCORD_CHANNEL_ID'):
         # If we're creating a new server, set a timeout
