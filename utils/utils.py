@@ -217,7 +217,7 @@ def get_answer_api(prompt, msgs = None,max_token=2000):
         try:
             response = openai.ChatCompletion.create(
                 # model="gpt-3.5-turbo",  # The name of the OpenAI chatbot model to use
-                model="gpt-4-1106-preview",  # The name of the OpenAI chatbot model to use
+                model="gpt-4o",  # The name of the OpenAI chatbot model to use
                 messages=mssgs,  # The conversation history up to this point, as a list of dictionaries
                 max_tokens=max_token,        # The maximum number of tokens (words or subwords) in the generated response
                 stop=None,              # The stopping sequence for the generated response, if any (not used here)
